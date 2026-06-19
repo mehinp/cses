@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${fileDirname}/build/${fileBasenameNoExtension}",
+            "args": [],
+            "cwd": "${fileDirname}",
+            "stdio": ["input.txt", null, null],
+            "preLaunchTask": "C/C++: clang++ build"
+        }
+    ]
+}

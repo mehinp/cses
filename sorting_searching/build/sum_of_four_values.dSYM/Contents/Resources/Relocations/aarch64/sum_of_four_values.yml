@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/mehinhome/dev/algo/cses/sorting_searching/build/sum_of_four_values'
+relocations:     []
+...

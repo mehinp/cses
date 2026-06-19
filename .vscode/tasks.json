@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "mkdir build",
+            "type": "shell",
+            "command": "mkdir -p ${fileDirname}/build",
+            "presentation": {
+                "reveal": "never"
+            }
+        },
+        {
+            "type": "shell",
+            "label": "C/C++: clang++ build",
+            "command": "/usr/bin/clang++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-std=c++20",
+                "-g",
+                "-O0",
+                "-Wall",
+                "${file}",
+                "-o",
+                "${fileDirname}/build/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}/build"
+            },
+            "dependsOn": [
+                "mkdir build"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        }
+    ]
+}
