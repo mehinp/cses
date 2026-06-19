@@ -18,5 +18,5 @@ int main() {
         curr = max(a[i], curr + a[i]);
         best = max(best, curr);
     }
-    cout << best << '\n';
+    cout << best << "\n";
 }
