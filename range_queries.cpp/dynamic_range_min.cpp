@@ -1,26 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+const int INF = 1e9 + 5;
 template<typename T>
 struct SegTree {
     int n;
     vector<T> tree;
 
-    SegTree(vector<T>& arr) {
+    SegTree(vector<T> arr) {
         int pad = 1;
         while (pad < int(arr.size())) {
             pad <<= 1;
         }
         this->n = pad;
-        arr.resize(pad, 0);
-        tree.assign(2 * n, 0);
+        arr.resize(pad, INF);
+        tree.assign(2 * n, INF);
         
         for (int i = 0; i < n; i++) {
             tree[n + i] = arr[i];
         }
 
         for (int i = n - 1; i >= 1; i--) {
-            tree[i] = tree[2 * i] + tree[2 * i + 1];
+            tree[i] = min(tree[2 * i], tree[2 * i + 1]);
         }
     }   
 
@@ -29,35 +30,31 @@ struct SegTree {
             return tree[node];
         }
         if (node_right < query_low || query_high < node_left) {
-            return 0;
+            return INF;
         }
         
         int mid = (node_left + node_right) / 2;
 
-        return get(query_low, query_high, 2 * node, node_left, mid) 
-                + get(query_low, query_high, 2 * node + 1, mid + 1, node_right);
+        return min(get(query_low, query_high, 2 * node, node_left, mid), 
+            get(query_low, query_high, 2 * node + 1, mid + 1, node_right));
     }
 
     T query(int l, int r) {
-        l -= 1;
-        r -= 1;
-        assert(l >= 0 && r < n && l <= r);
-        return get(l, r, 1, 0, n - 1);
+        assert(l > 0 && r <= n && l <= r);
+        return get(l, r, 1, 1, n);
     }
 
     void update(int idx, T newVal) {
-        idx -= 1;
-        assert(idx >= 0 && idx < n);
-        int node = n + idx;
+        assert(idx >= 1 && idx <= n);
+        int node = n - 1 + idx;
         tree[node] = newVal;
         node /= 2;
         while (node > 0) {
-            tree[node] = tree[2 * node] + tree[2 * node + 1];
+            tree[node] = min(tree[2 * node], tree[2 * node + 1]);
             node /= 2;
         }
     }
 };
-
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -65,20 +62,19 @@ int main() {
     
     int n, q;
     cin >> n >> q;
-    vector<long long> x(n);
+    vector<int> x(n);
     for (int i = 0; i < n; i++) {
         cin >> x[i];
     }
-
-    SegTree<long long> sg(x);
+    SegTree<int> sg(x);
     while (q--) {
-        int w, a, b;
-        cin >> w >> a >> b;
-        if (w == 1) {    
-            sg.update(a, b);
+        int a, b, c;
+        cin >> a >> b >> c;
+        if (a == 1) {
+            sg.update(b, c);
         } else {
-            assert(w == 2);
-            cout << sg.query(a, b) << '\n';
+            assert(a == 2);
+            cout << sg.query(b, c) << '\n';
         }
     }
 }
